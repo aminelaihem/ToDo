@@ -13,6 +13,12 @@ def get_db():
     finally:
         db.close()
 
+
+@router.get("/tasks", response_model=list[TaskOut])
+def get_all_tasks(db: Session = Depends(get_db)):
+    tasks = db.query(Task).all()
+    return tasks
+
 @router.post("/tasks", response_model=TaskOut)
 def create_task(task: TaskCreate, db: Session = Depends(get_db)):
     db_task = Task(title=task.title)
